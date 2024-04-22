@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const crypto = require('crypto');;
 
 const AddressService = require("../services/address.service")
+const {ObjectId} = require("mongodb");
 const addressService = new AddressService()
 class AuthService {
     generateRandomString(length) {
@@ -175,6 +176,33 @@ class AuthService {
             };
         } catch (error) {
             console.log(error.message);
+        }
+    }
+    async profile(data){
+        try {
+            const token = data.headers.authorization?.split(" ")[1];
+
+            const decoded = await jwt.decode(token,  process.env.TOKEN_KEYWORD);
+
+            const userToken = decoded.user.username;
+            let user = await User.findOne({ username: userToken });
+
+            let currentRole = await Role.findOne({
+                _id: user.role ? new ObjectId(user.role._id) : null,
+            });
+            if(currentRole.name === "USER"){
+                return {
+                    account: await Reader.findOne({user: user}).populate('user'),
+                    role: currentRole.name
+                };
+            }else{
+                return {
+                    account: await Employee.findOne({user:user}).populate('user'),
+                    role: currentRole.name
+                }
+            }
+        }catch (e) {
+            console.log(e.message)
         }
     }
 }

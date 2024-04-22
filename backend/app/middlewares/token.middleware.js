@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const ApiError = require("../api-error");
-
+const Role = require("../models/Role")
 class TokenMiddleware {
     async checkUser(req, res, next) {
         try {
@@ -52,8 +52,8 @@ class TokenMiddleware {
             if (!decodedToken) {
                 return res.status(403).json(new ApiError(403,'Bị từ chối'));
             }
-
-            if (decodedToken.user.username !== "bach@gmail.com") {
+            let userRole = await Role.findById(decodedToken.user.role);
+            if (userRole.name !== "ADMIN") {
                 return res.status(403).json(new ApiError(403,`${decodedToken.user.name} không có quyền truy cập`));
             }
 

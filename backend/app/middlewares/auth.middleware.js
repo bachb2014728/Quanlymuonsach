@@ -63,20 +63,18 @@ class AuthMiddleware {
         }
     }
 
-    async admin(req, res, next) {
+    async profile(req, res, next) {
         try {
-            const {username, password} = req.body
-
-            if (!username || !password) {
-                return res.json({ status: "bad", msg: "Hamma qatorlarni to'ldiring!" });
+            const token = req.headers.authorization?.split(" ")[1];
+            if (!token ) {
+                return res.status(401).json(new ApiError(401, "Không tim thấy token"));
             }
+            const decoded = await jwt.decode(token,  process.env.TOKEN_KEYWORD);
 
-            if (username !== process.env.ADMIN_LOGIN) {
-                return res.json({ status: "bad", msg: "Username noto'g'ri terilgan" });
-            }
+            const userToken = decoded.user.username;
 
-            if (password !== process.env.ADMIN_PASS) {
-                return res.json({ status: "bad", msg: "Parol noto'g'ri terilgan" });
+            if (!userToken ) {
+                return res.status(403).json(new ApiError(403,"Lỗi token không đúng"));
             }
 
             next()

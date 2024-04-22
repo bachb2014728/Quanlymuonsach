@@ -20,5 +20,6 @@ router.route("/login").post( authMiddleware.login, authController.login);
 router.route("/refresh").post( authMiddleware.refresh, authController.refresh)
 //Update Account
 router.route("/update").put(checkAdmin,authController.update);
-
+//profile
+router.route("/profile").get(authMiddleware.profile,authController.profile)
 module.exports = router;

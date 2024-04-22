@@ -16,7 +16,7 @@ router.route("/")
 
 router.route("/:id")
     .get(checkAdmin,publishingMiddleware.get,publishingController.findOne)
-    .put(checkAdmin,publishingMiddleware.update,publishingController.update)
+    .put(checkAdmin,publishingController.update)
     .delete(checkAdmin,publishingController.delete);
 
 module.exports = router;

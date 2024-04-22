@@ -40,12 +40,13 @@ class AuthorMiddleware{
     async update(req,res,next){
         try {
             const _id = req.params.id;
+            console.log(_id)
             const {name,code} = req.body;
             if(!_id){
                 return res.status(400).json(new ApiError(400,"Id là rỗng"))
             }
             const existAuthor = await Author.findOne({
-                _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+                _id: ObjectId.isValid(_id) ? new ObjectId(_id) : null,
             });
             if(!existAuthor){
                 return res.status(404).json(new ApiError(404, `Không tìm thấy ${_id}`))
@@ -63,6 +64,7 @@ class AuthorMiddleware{
         try {
             const id = req.params.id;
             const {name,code} = req.body;
+            console.log()
             if(!id){
                 return res.status(400).json(new ApiError(400,"Id là rỗng"))
             }

@@ -19,6 +19,6 @@ router.route("/")
 router.route("/:id")
     .get(checkAdmin,bookMiddleware.get,bookController.getOne)
     .put(checkAdmin,bookMiddleware.update,bookController.update)
-    .delete(checkAdmin,bookMiddleware.get,bookController.delete);
+    .delete(checkAdmin,bookController.delete);
 
 module.exports = router;

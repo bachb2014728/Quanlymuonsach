@@ -7,19 +7,20 @@ const bookSchema = new Schema(
             required: true,
             unique: true,
         },
+        images:[
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Image'
+            }
+        ],
         price:{
             type: Number,
-            required: true,
-            unique: true,
         },
         quantity:{
             type: Number,
-            required: true,
-            unique: true,
         },
         year:{
             type: String,
-            required: true,
         },
         publishing:{
             type: Schema.Types.ObjectId,

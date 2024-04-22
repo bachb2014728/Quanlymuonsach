@@ -31,3 +31,11 @@ exports.update = async (req, res, next) =>{
         console.log(error.message);
     }
 }
+exports.profile = async (req, res, next) =>{
+    try {
+        const result = await authService.profile(req);
+        res.json(result);
+    } catch (error) {
+        console.log(error.message);
+    }
+}

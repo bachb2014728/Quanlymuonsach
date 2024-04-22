@@ -16,4 +16,6 @@ app.use("/api/v1/publishing", require("./app/routes/publishing.route"));
 
 app.use("/api/v1/details", require("./app/routes/detail.route"));
 
+app.use("/api/v1/images", require("./app/routes/image.router"));
+
 module.exports = app;

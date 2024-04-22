@@ -21,7 +21,7 @@ class BookMiddleware{
             let currentBook = await Book.findOne({
                 _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
             });
-            const {name,price, quantity, year, author , publishing, favorites} = req.body
+            const {name,price, images, quantity, year, author , publishing, favorites} = req.body
             if(!currentBook){
                 return res.status(404).json(new ApiError(404,`Không tìm thấy sách với ID: ${id}`))
             }

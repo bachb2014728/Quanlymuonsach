@@ -18,11 +18,9 @@ const readerSchema = new Schema(
         },
         date:{
             type: Date,
-            required: false,
         },
         gender:{
             type: String,
-            required: false,
         },
         phone:{
             type: String,
