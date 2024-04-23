@@ -9,7 +9,14 @@ const routes = [
         path: "/books/create", component: ()=> import('@/views/books/book-create.vue'),
         meta: { requiresAuth: true, requiresAdmin: true }
     },
-
+    {
+        path: "/details", component: ()=> import('@/views/detail-page.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: "/profile", component: () => import('@/views/auth-page.vue'),
+        meta: {requiresAuth: true}
+    },
     {
         path: "/publishing", component: ()=> import('@/views/publishing-page.vue'),
         meta: { requiresAuth: true, requiresAdmin: true }

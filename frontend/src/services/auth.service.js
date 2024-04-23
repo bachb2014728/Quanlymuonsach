@@ -19,9 +19,11 @@ class AuthService {
             throw error;
         }
     }
-    async refresh(data) {
-        return (await this.api.post("/refresh", data ,{
-                withCredentials: true
+    async getReaders() {
+        return (await this.api.get("/readers",{
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
             })
         );
     }

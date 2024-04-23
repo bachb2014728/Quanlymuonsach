@@ -32,7 +32,7 @@ const bookSchema = new Schema(
         },
         favorites:[{
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'Reader'
         }]
     },
     { timestamps: true }

@@ -57,12 +57,11 @@ export default {
             await store.dispatch('setAuth', true);
             localStorage.setItem('token', response.data.token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-
+            await router.push('/');
             const  responseProfile = await AuthService.profile();
             await store.dispatch('setMessage', responseProfile.data.account.name);
             await store.dispatch('setRole', responseProfile.data.role);
 
-            await router.push('/');
           } else {
             errors.username = 'username hoặc mật khẩu không đúng.';
             errors.password = 'username hoặc mật khẩu không đúng.';

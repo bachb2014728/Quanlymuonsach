@@ -3,9 +3,11 @@ const User = require("../models/User")
 const jwt = require("jsonwebtoken");
 const Reader = require("../models/Reader")
 const Employee = require("../models/Employee")
-
+const Province = require('../models/Province')
+const District = require('../models/District')
+const Ward = require('../models/Ward')
 const bcrypt = require("bcrypt");
-const crypto = require('crypto');;
+const crypto = require('crypto');
 
 const AddressService = require("../services/address.service")
 const {ObjectId} = require("mongodb");
@@ -106,6 +108,13 @@ class AuthService {
             console.log(error.message);
         }
     }
+    async getAllReader(){
+        try {
+            return await Reader.find({});
+        }catch (e) {
+            console.log(e.message)
+        }
+    }
     async update(data) {
         try {
             const { username, password, name, phone, address, role } = data.body;
@@ -191,14 +200,28 @@ class AuthService {
                 _id: user.role ? new ObjectId(user.role._id) : null,
             });
             if(currentRole.name === "USER"){
+                let account = await Reader.findOne({user: user}).populate('user');
+                let province = await Province.findOne(account.address.province)
+                let district = await District.findOne(account.address.district)
+                let ward = await Ward.findOne(account.address.ward)
                 return {
-                    account: await Reader.findOne({user: user}).populate('user'),
-                    role: currentRole.name
+                    account: account,
+                    role: currentRole.name,
+                    province: province,
+                    district: district,
+                    ward: ward
                 };
             }else{
+                let account = await Employee.findOne({user:user}).populate('user');
+                let province = await Province.findOne(account.address.province)
+                let district = await District.findOne(account.address.district)
+                let ward = await Ward.findOne(account.address.ward)
                 return {
-                    account: await Employee.findOne({user:user}).populate('user'),
-                    role: currentRole.name
+                    account: account,
+                    role: currentRole.name,
+                    province: province,
+                    district: district,
+                    ward: ward
                 }
             }
         }catch (e) {

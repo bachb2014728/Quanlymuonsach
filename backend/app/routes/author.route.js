@@ -8,11 +8,11 @@ const AuthorMiddleware = require("../middlewares/author.middleware")
 const authorMiddleware = new AuthorMiddleware();
 const router = express.Router();
 
-router.route("/").get(checkAdmin,authorController.findAll)
+router.route("/").get(authorController.findAll)
     .post(checkAdmin, authorMiddleware.create,authorController.create)
     .delete(checkAdmin,authorController.deleteAll);
 
-router.route("/:id").get(checkAdmin,authorMiddleware.getOne,authorController.findOne)
+router.route("/:id").get(authorMiddleware.getOne,authorController.findOne)
     .put(checkAdmin,authorMiddleware.update,authorController.update)
     .delete(checkAdmin,authorMiddleware.delete,authorController.delete);
 

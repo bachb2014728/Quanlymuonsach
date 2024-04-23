@@ -26,10 +26,12 @@
 import PublishingService from "@/services/publishing.service.js";
 import AddPublishing from "@/components/AddPublishing.vue";
 import PublishingDetail from "@/components/PublishingDetail.vue";
-import BookService from "@/services/book.service.js";
 
 export default {
   name: "publishing-page",
+  mounted() {
+    document.title='Nhà xuất bản'
+  },
   components: {
     AddPublishing,
     PublishingDetail,

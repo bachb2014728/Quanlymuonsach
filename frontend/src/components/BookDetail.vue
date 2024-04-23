@@ -21,9 +21,10 @@
       </p>
       <p class="card-text">Yêu thích : {{item.favorites.length}}</p>
     </div>
-    <div class="card-footer text-center">
+    <div class="card-footer text-center" v-if="auth && role ==='ADMIN'">
       <button @click="updateItemAdmin(item)" class="btn btn-warning btn-sm me-3" data-bs-toggle="modal" data-bs-target="#editModal">Sửa</button>
-      <button @click="deleteItem(item)" class="btn btn-secondary btn-sm">Xóa</button>
+      <button  @click="deleteItem(item)" class="btn btn-secondary btn-sm me-3">Xóa</button>
+      <button @click="addToCart(item)" class="btn btn-info btn-sm text-light">Mượn xíu</button>
     </div>
   </div>
   <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -82,10 +83,11 @@
 </template>
 <script>
 import AuthorService from "@/services/author.service.js";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import PublishingService from "@/services/publishing.service.js";
 import axios from "axios";
 import BookService from "@/services/book.service.js";
+import {useStore} from "vuex";
 
 export default {
   name: "MerchandiseDetail",
@@ -94,13 +96,23 @@ export default {
     const authors = ref([]);
     const publishingList = ref([]);
     const selectedFiles = ref([]);
+    const store = useStore();
+    const auth = computed(() => store.state.auth);
+    const role = computed(()=> store.state.role);
+    const addToCart = (item) => {
+      store.dispatch('addToCart', item);
+    };
     onMounted( async () => {
+
       const response = await AuthorService.getAllAuthors();
       authors.value = response.data;
       const responsePublishing = await PublishingService.getAll();
       publishingList.value = responsePublishing.data;
     });
     return {
+      auth,
+      role,
+      addToCart,
       selectedFiles,
       authors,
       publishingList

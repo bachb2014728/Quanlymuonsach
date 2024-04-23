@@ -10,14 +10,14 @@ const bookMiddleware = new BookMiddleware();
 const router = express.Router();
 
 router.route("/")
-    .get(checkAdmin,bookController.findAllBook)
+    .get(bookController.findAllBook)
     .post(checkAdmin,bookMiddleware.create,bookController.create)
     .delete(checkAdmin,bookController.deleteAll);
 
 // router.route("/favorite").get(checkAdmin,bookController.findAllFavorite);
 
 router.route("/:id")
-    .get(checkAdmin,bookMiddleware.get,bookController.getOne)
+    .get(bookMiddleware.get,bookController.getOne)
     .put(checkAdmin,bookMiddleware.update,bookController.update)
     .delete(checkAdmin,bookController.delete);
 

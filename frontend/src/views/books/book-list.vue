@@ -52,6 +52,7 @@ export default {
       if (index !== -1) {
         this.books.splice(index, 1, updatedItem);
       }
+      window.alert('Cập nhật sách thành công!');
     },
     async deleteItem(item) {
       let index = this.books.indexOf(item);
@@ -61,6 +62,7 @@ export default {
       this.selectedItem = null;
 
       await BookService.deleteOneBook(item.id)
+      window.alert('Xóa sách thành công!');
     },
   }
 }

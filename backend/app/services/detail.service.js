@@ -22,7 +22,7 @@ class DetailService{
 
     }
     async create(data) {
-        const {reader,books, endDate} = data.body;
+        const {reader,carts, endDate,info} = data.body;
         const user = await this.getUsername(data);
 
         let currentRole = await Role.findOne({
@@ -37,30 +37,40 @@ class DetailService{
         }else{
             endDateNew = endDate
         }
-        const bookLists = await Book.find({
-            _id: { $in: books }
-        });
-        console.log(bookLists)
-        if (currentRole.name === 'ADMIN') {
-            console.log("ADMIN")
-            let readerAdd = await Reader.findOne({
-                _id: ObjectId.isValid(reader) ? new ObjectId(reader) : null,
-            });
-            const newDetail = await new Detail({
-                books: bookLists,
-                startDate: startDate,
-                endDate: endDateNew,
-                reader: readerAdd,
-                status: "progress"
-            });
 
-            return await newDetail.save();
+        if (currentRole.name === 'ADMIN') {
+            let existReader = await Reader.findOne({code: info.code});
+            if(existReader){
+                const newDetail = await new Detail({
+                    books: await this.convertBook(existReader,carts),
+                    startDate: startDate,
+                    endDate: endDateNew,
+                    reader: existReader,
+                    status: "progress"
+                });
+                return await newDetail.save();
+            }else {
+                let readerAdd = await new Reader({
+                    code: info.code,
+                    name: info.name,
+                    phone: info.phone
+                })
+                await readerAdd.save()
+                const newDetail = await new Detail({
+                    books: await this.convertBook(readerAdd,carts),
+                    startDate: startDate,
+                    endDate: endDateNew,
+                    reader: readerAdd,
+                    status: "progress"
+                });
+                return await newDetail.save();
+            }
         } else if (currentRole.name === 'USER') {
             console.log(`USER :${user._id}`)
             const reader = await Reader.findOne({ user: user._id });
 
             const newDetail = await new Detail({
-                books: bookLists,
+                books: await this.convertBook(reader,carts),
                 startDate: startDate,
                 endDate: endDateNew,
                 reader: reader,
@@ -71,6 +81,21 @@ class DetailService{
         } else {
             throw new Error('Invalid user role');
         }
+    }
+    async convertBook(reader,carts){
+        const bookLists = await Book.find({
+            _id: { $in: carts }
+        }).then(async books => {
+            for (let book of books) {
+                book.quantity -= 1;
+                book.favorites.push(reader);
+                await book.save();
+            }
+            return books;
+        });
+        console.log(bookLists)
+
+        return bookLists;
     }
     async update(data) {
         try {
@@ -131,6 +156,12 @@ class DetailService{
          }catch (e) {
              console.log(e.message)
          }
+    }
+    async findOne(data){
+         let id = data.params.id;
+        return await Detail.findOne({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        }).populate('reader').populate('books');
     }
 }
 module.exports=DetailService

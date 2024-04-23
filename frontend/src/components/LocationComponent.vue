@@ -87,7 +87,7 @@ export default {
     }
   },
   created() {
-    this.getProvinces();
+     this.getProvinces();
   }
 }
 </script>

@@ -39,3 +39,11 @@ exports.profile = async (req, res, next) =>{
         console.log(error.message);
     }
 }
+exports.get= async (req, res, next) =>{
+    try {
+        const result = await authService.getAllReader();
+        res.json(result);
+    } catch (error) {
+        console.log(error.message);
+    }
+}

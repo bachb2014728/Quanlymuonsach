@@ -102,7 +102,7 @@ export default {
       }
 
       if(Object.values(errors).every(error => !error)) {
-        console.log(data);
+        window.alert('Đăng kí tài khoản thành công!');
         await AuthService.signup(data)
         await router.push('/login');
       }

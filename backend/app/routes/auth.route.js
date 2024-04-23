@@ -22,4 +22,6 @@ router.route("/refresh").post( authMiddleware.refresh, authController.refresh)
 router.route("/update").put(checkAdmin,authController.update);
 //profile
 router.route("/profile").get(authMiddleware.profile,authController.profile)
+//get reader
+router.route("/readers").get(checkAdmin,authController.get);
 module.exports = router;
